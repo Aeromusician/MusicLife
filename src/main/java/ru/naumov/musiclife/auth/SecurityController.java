@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.naumov.musiclife.userprofile.UserProfileService;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,6 +27,7 @@ public class SecurityController {
 
     private JwtCore jwtCore;
 
+    private UserProfileService profileService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequestDTO dto) {
@@ -43,6 +45,7 @@ public class SecurityController {
         user.setPassword(encodedPassword);
         user.setUserType(dto.getUserType());
         userRepository.save(user);
+        profileService.createProfileFirst(user.getUsername());
         return ResponseEntity.ok("Registration successful");
     }
 
@@ -81,5 +84,10 @@ public class SecurityController {
     @Autowired
     public void setJwtCore(JwtCore jwtCore) {
         this.jwtCore = jwtCore;
+    }
+
+    @Autowired
+    public void setProfileService(UserProfileService profileService) {
+        this.profileService = profileService;
     }
 }

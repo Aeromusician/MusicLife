@@ -1,6 +1,7 @@
 package ru.naumov.musiclife.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.naumov.musiclife.Security.Response;
 import ru.naumov.musiclife.event.EventDTO;
@@ -9,6 +10,7 @@ import ru.naumov.musiclife.userprofile.UserProfileDTO;
 import ru.naumov.musiclife.userprofile.UserProfileService;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class MainController {
     @PostMapping("/create-event")
     public Response<Long> createEvent(@RequestBody EventDTO createDto, Principal principal) {
         return Response.data(eventService.createEvent(createDto, principal.getName()));
+    }
+
+    @PostMapping("/get-all-events")
+    public Response<List<EventDTO>> getAllEvents(@RequestBody Sort sort) {
+        return Response.data(eventService.getAllEvents(sort));
     }
 
     @DeleteMapping("/delete-event/{id}")
@@ -63,8 +70,8 @@ public class MainController {
     }
 
     @PostMapping("/answer-event/{eventId}")
-    public Response<String> answerEvent(@PathVariable Long eventId) {
-        userProfileService.answerEvent(eventId);
+    public Response<String> answerEvent(@PathVariable Long eventId, Principal principal) throws Exception {
+        userProfileService.answerEvent(eventId, principal.getName());
         return Response.OK;
     }
 }
