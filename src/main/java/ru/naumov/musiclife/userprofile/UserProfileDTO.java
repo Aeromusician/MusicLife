@@ -1,6 +1,7 @@
 package ru.naumov.musiclife.userprofile;
 
 import lombok.Data;
+import ru.naumov.musiclife.event.EventInUserProfileDTO;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class UserProfileDTO {
 
     private String isDeleted;
 
-    private List<Long> myEvent;
+    private List<EventInUserProfileDTO> myEvent;
 
-    private List<Long> answeredEvents;
+    private List<EventInUserProfileDTO> answeredEvents;
 }

@@ -2,7 +2,6 @@ package ru.naumov.musiclife.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-@Data
 public class JwtCore {
 
     @Value("${musiclife.app.secret}")
@@ -28,6 +26,6 @@ public class JwtCore {
     }
 
     public String getNameFromJwt(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 }

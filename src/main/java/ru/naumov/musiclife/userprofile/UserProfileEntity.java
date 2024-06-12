@@ -30,10 +30,10 @@ public class UserProfileEntity {
     private String isDeleted;
 
     @Column
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "id")
     private List<EventEntity> myEvents;
 
     @Column
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "id")
     private List<EventEntity> answeredEvents;
 }

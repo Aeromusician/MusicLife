@@ -29,23 +29,23 @@ public class MainController {
     }
 
     @PostMapping("/create-event")
-    public Response<Long> createEvent(@RequestBody EventDTO createDto) {
-        return Response.data(eventService.createEvent(createDto));
+    public Response<Long> createEvent(@RequestBody EventDTO createDto, Principal principal) {
+        return Response.data(eventService.createEvent(createDto, principal.getName()));
     }
 
     @DeleteMapping("/delete-event/{id}")
-    public Response<String> deleteEvent(@PathVariable("id") Long id) {
-        eventService.deleteEvent(id);
+    public Response<String> deleteEvent(@PathVariable("id") Long id, Principal principal) throws Exception {
+        eventService.deleteEvent(id, principal.getName());
         return Response.OK;
     }
 
     @PutMapping("/update-event")
-    public Response<Long> updateEvent(@RequestBody EventDTO eventDTO) {
+    public Response<Long> updateEvent(@RequestBody EventDTO eventDTO, Principal principal) {
         return Response.data(eventService.updateEvent(eventDTO));
     }
 
     @PostMapping("/add-bio")
-    public Response<String> addBioAndGear(@RequestBody UserProfileDTO dto) {
+    public Response<String> addBioAndGear(@RequestBody UserProfileDTO dto, Principal principal) {
         userProfileService.addBioAndGear(dto);
         return Response.OK;
     }

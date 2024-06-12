@@ -25,7 +25,7 @@ public class EventEntity {
     private Long cost;
 
     @ManyToOne
-    @JoinColumn(name = "organizerId")
+    @JoinColumn(name = "org_id")
     private User organizerId;
 
     @Column
