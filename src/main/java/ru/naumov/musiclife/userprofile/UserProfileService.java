@@ -10,5 +10,5 @@ public interface UserProfileService {
 
     UserProfileDTO getMyProfile(Long id);
 
-    void answerEvent(Long eventId);
+    void answerEvent(Long eventId, String userName) throws Exception;
 }

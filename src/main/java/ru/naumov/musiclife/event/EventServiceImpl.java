@@ -4,11 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import ru.naumov.musiclife.auth.User;
 import ru.naumov.musiclife.auth.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +56,26 @@ public class EventServiceImpl implements EventService {
         return repository.save(entity).getId();
     }
 
+    public void updateMusiciansInEvent(Long musician, Long eventId) {
+        Optional<EventEntity> event = repository.findById(eventId);
+        if (event.isPresent()) {
+            Optional<User> userById = userRepository.findUserById(musician);
+            if (userById.isPresent()) {
+                EventEntity entity = event.get();
+                List<User> musicians = entity.getMusicians();
+                if (CollectionUtils.isEmpty(musicians)) {
+                    List<User> list = new ArrayList<>();
+                    list.add(userById.get());
+                    entity.setMusicians(list);
+                    repository.save(entity);
+                } else {
+                    musicians.add(userById.get());
+                    repository.save(entity);
+                }
+            }
+        }
+    }
+
     @Override
     public List<EventDTO> getAllEvents(Sort sort) { //todo:Добавить фильтрацию
         List<EventEntity> event = repository.findAll(sort);
@@ -69,8 +91,33 @@ public class EventServiceImpl implements EventService {
         return repository.findById(id).map(this::toDto).orElseThrow(() -> new EntityNotFoundException("Мероприятие не найдено"));
     }
 
-    //todo:Допилить метод toDTO у Event
     private EventDTO toDto(EventEntity entity) {
-        return new EventDTO();
+        EventDTO dto = new EventDTO();
+        if (entity.getId() != null) {
+            dto.setId(entity.getId());
+        }
+        if (entity.getCost() != null) {
+            dto.setCost(entity.getCost());
+        }
+
+        if (entity.getName() != null) {
+            dto.setName(entity.getName());
+        }
+        if (entity.getLocation() != null) {
+
+            dto.setLocation(entity.getLocation());
+        }
+        if (!CollectionUtils.isEmpty(entity.getMusicians())) {
+            List<Long> dtoList = new ArrayList<>();
+            List<User> musicians = entity.getMusicians();
+            musicians.forEach(e -> {
+                dtoList.add(e.getId());
+            });
+            dto.setMusicians(dtoList);
+        }
+        if (entity.getOrganizerId() != null) {
+            dto.setOrganizerId(entity.getOrganizerId().getId());
+        }
+        return dto;
     }
 }

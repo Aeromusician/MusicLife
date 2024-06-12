@@ -14,5 +14,7 @@ public interface EventService {
 
     List<EventDTO> getAllEvents(Sort sort);
 
+    void updateMusiciansInEvent(Long musician, Long eventId);
+
     EventDTO getEvent(Long id);
 }

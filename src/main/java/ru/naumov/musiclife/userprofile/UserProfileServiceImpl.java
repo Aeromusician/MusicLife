@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import ru.naumov.musiclife.auth.User;
 import ru.naumov.musiclife.auth.UserRepository;
+import ru.naumov.musiclife.auth.UserType;
+import ru.naumov.musiclife.event.EventDTO;
 import ru.naumov.musiclife.event.EventInUserProfileDTO;
 import ru.naumov.musiclife.event.EventService;
 
@@ -58,9 +60,18 @@ public class UserProfileServiceImpl implements UserProfileService {
         return profileRepository.findById(id).map(this::toDto).orElseThrow(() -> new EntityNotFoundException("profile not found"));
     }
 
-    @Override //todo:Добавить ответ на мероприятие
-    public void answerEvent(Long eventId) {
+    @Override
+    @Transactional
+    public void answerEvent(Long eventId, String userName) throws Exception {
+        User user = findUserByName(userName);
+        if (!user.getUserType().equals(UserType.MUSICIAN)) {
+            throw new Exception("ВЫ НЕ МУЗЫКАНТ ДАЖЕ НЕ ПЫТАЙТЕСЬ");
+        }
 
+        EventDTO event = eventService.getEvent(eventId);
+        List<Long> musicians = event.getMusicians();
+        musicians.add(user.getId());
+        eventService.updateMusiciansInEvent(user.getId(), eventId);
     }
 
     private UserProfileDTO toDto(UserProfileEntity entity) {
