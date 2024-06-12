@@ -6,7 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,9 @@ import java.io.IOException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
+
     private JwtCore jwtCore;
+
     private UserDetailsService userDetailsService;
 
 
@@ -37,20 +39,30 @@ public class TokenFilter extends OncePerRequestFilter {
                 try {
                     userName = jwtCore.getNameFromJwt(jwt);
                 } catch (ExpiredJwtException e) {
-                    //todo
+                    System.out.println(e.getMessage());
                 }
                 if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     userDetails = userDetailsService.loadUserByUsername(userName);
                     auth = new UsernamePasswordAuthenticationToken(
-                            userDetails, null
+                            userDetails, null, userDetails.getAuthorities()
                     );
                     SecurityContextHolder.getContext().setAuthentication(auth);
+
                 }
             }
-
         } catch (Exception e) {
-            //todo
+            System.out.println(e.getMessage());
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Autowired
+    public void setJwtCore(JwtCore jwtCore) {
+        this.jwtCore = jwtCore;
+    }
+
+    @Autowired
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 }
