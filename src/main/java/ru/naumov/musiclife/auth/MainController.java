@@ -57,8 +57,8 @@ public class MainController {
         return Response.OK;
     }
 
-    @DeleteMapping("/delete-profile/{}")
-    public Response<String> deleteProfile(Long id) {
+    @DeleteMapping("/delete-profile/{id}")
+    public Response<String> deleteProfile(@PathVariable Long id) {
         userProfileService.deleteProfile(id);
         return Response.OK;
     }
