@@ -1,7 +1,9 @@
 package ru.naumov.musiclife.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.naumov.musiclife.Security.Response;
 import ru.naumov.musiclife.event.EventDTO;
@@ -10,7 +12,6 @@ import ru.naumov.musiclife.userprofile.UserProfileDTO;
 import ru.naumov.musiclife.userprofile.UserProfileService;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,8 +37,8 @@ public class MainController {
     }
 
     @PostMapping("/get-all-events")
-    public Response<List<EventDTO>> getAllEvents(@RequestBody Sort sort) {
-        return Response.data(eventService.getAllEvents(sort));
+    public Response<Page<EventDTO>> getAllEvents(@ParameterObject Pageable pageable) {
+        return Response.data(eventService.getAllEvents(pageable));
     }
 
     @DeleteMapping("/delete-event/{id}")
