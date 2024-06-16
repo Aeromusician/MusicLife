@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/secured")
+@CrossOrigin
 public class MainController {
 
     private final EventService eventService;
@@ -47,8 +48,8 @@ public class MainController {
         return Response.data(eventService.getMyEvents(principal));
     }
 
+
     @DeleteMapping("/delete-event/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.DELETE)
     public Response<String> deleteEvent(@PathVariable("id") Long id, Principal principal) throws Exception {
         eventService.deleteEvent(id, principal.getName());
         return Response.OK;
@@ -73,7 +74,6 @@ public class MainController {
 
     @GetMapping("/{id}")
     public Response<UserProfileDTO> getMyProfile(@PathVariable Long id) {
-        ;
         return Response.data(userProfileService.getMyProfile(id));
     }
 
