@@ -11,6 +11,7 @@ import ru.naumov.musiclife.auth.UserRepository;
 import ru.naumov.musiclife.userprofile.UserProfileEntity;
 import ru.naumov.musiclife.userprofile.UserProfileRepository;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,6 +93,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventDTO> getMyEvents(Principal principal) {
+        User user = findUserByName(principal.getName());
+        return repository.getUserEvents(user.getId()).stream().map(this::toDto).toList();
+    }
+
+    @Override
     public EventDTO getEvent(Long id) {
         return repository.findById(id).map(this::toDto).orElseThrow(() -> new EntityNotFoundException("Мероприятие не найдено"));
     }
@@ -122,6 +129,8 @@ public class EventServiceImpl implements EventService {
         }
         if (entity.getOrganizerId() != null) {
             dto.setOrganizerId(entity.getOrganizerId().getId());
+            dto.setOrgMail(entity.getOrganizerId().getEmail());
+            dto.setOrgUserName(entity.getOrganizerId().getUsername());
         }
         return dto;
     }

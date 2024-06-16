@@ -93,6 +93,9 @@ public class UserProfileServiceImpl implements UserProfileService {
                         EventInUserProfileDTO event = new EventInUserProfileDTO();
                         event.setId(e.getId());
                         event.setName(e.getName());
+                        event.setCost(e.getCost());
+                        event.setLocation(e.getLocation());
+                        event.setOrgId(e.getOrganizerId().getId());
                         list.add(event);
                     }
             );
@@ -105,6 +108,9 @@ public class UserProfileServiceImpl implements UserProfileService {
                         EventInUserProfileDTO event = new EventInUserProfileDTO();
                         event.setId(e.getId());
                         event.setName(e.getName());
+                        event.setCost(e.getCost());
+                        event.setLocation(e.getLocation());
+                        event.setOrgId(e.getOrganizerId().getId());
                         list.add(event);
                     }
             );

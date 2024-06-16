@@ -9,4 +9,10 @@ public class EventInUserProfileDTO {
 
     private String name;
 
+    private Long cost;
+
+    private String location;
+
+    private Long orgId;
+
 }
