@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.naumov.musiclife.auth.User;
 import ru.naumov.musiclife.auth.UserRepository;
+import ru.naumov.musiclife.userprofile.UserProfileEntity;
+import ru.naumov.musiclife.userprofile.UserProfileRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository repository;
     private final UserRepository userRepository;
+    private final UserProfileRepository profileRepository;
 
     @Override
     public Long createEvent(EventDTO dto, String userName) {
@@ -26,7 +29,13 @@ public class EventServiceImpl implements EventService {
         entity.setName(dto.getName());
         entity.setLocation(dto.getLocation());
         entity.setCost(dto.getCost());
-        entity.setOrganizerId(findUserByName(userName));
+        User userByName = findUserByName(userName);
+        entity.setOrganizerId(userByName);
+        UserProfileEntity profile = profileRepository.findByUserId(userByName.getId());
+        List<EventEntity> eventInProfile = new ArrayList<>(profile.getMyEvents());
+        eventInProfile.add(entity);
+        profile.setMyEvents(eventInProfile);
+        profileRepository.save(profile);
         return repository.save(entity).getId();
     }
 
