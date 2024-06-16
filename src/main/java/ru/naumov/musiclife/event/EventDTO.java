@@ -18,4 +18,8 @@ public class EventDTO {
     private List<Long> musicians;
 
     private Long organizerId;
+
+    private String orgMail;
+
+    private String orgUserName;
 }

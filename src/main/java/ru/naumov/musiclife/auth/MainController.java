@@ -12,6 +12,7 @@ import ru.naumov.musiclife.userprofile.UserProfileDTO;
 import ru.naumov.musiclife.userprofile.UserProfileService;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +42,13 @@ public class MainController {
         return Response.data(eventService.getAllEvents(pageable));
     }
 
+    @GetMapping("/get-my-events")
+    public Response<List<EventDTO>> getMyEvents(Principal principal) {
+        return Response.data(eventService.getMyEvents(principal));
+    }
+
     @DeleteMapping("/delete-event/{id}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = RequestMethod.DELETE)
     public Response<String> deleteEvent(@PathVariable("id") Long id, Principal principal) throws Exception {
         eventService.deleteEvent(id, principal.getName());
         return Response.OK;
@@ -65,7 +72,8 @@ public class MainController {
     }
 
     @GetMapping("/{id}")
-    public Response<UserProfileDTO> getMyProfile(@PathVariable Long id) {;
+    public Response<UserProfileDTO> getMyProfile(@PathVariable Long id) {
+        ;
         return Response.data(userProfileService.getMyProfile(id));
     }
 
