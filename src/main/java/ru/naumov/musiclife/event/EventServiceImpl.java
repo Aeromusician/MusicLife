@@ -27,7 +27,7 @@ public class EventServiceImpl implements EventService {
         entity.setLocation(dto.getLocation());
         entity.setCost(dto.getCost());
         entity.setOrganizerId(findUserByName(userName));
-        return null;
+        return repository.save(entity).getId();
     }
 
     private User findUserByName(String name) {
