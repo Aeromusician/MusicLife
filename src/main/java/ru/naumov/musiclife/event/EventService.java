@@ -1,8 +1,7 @@
 package ru.naumov.musiclife.event;
 
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EventService {
 
@@ -12,7 +11,7 @@ public interface EventService {
 
     Long updateEvent(EventDTO dto);
 
-    List<EventDTO> getAllEvents(Sort sort);
+    Page<EventDTO> getAllEvents(Pageable pageable);
 
     void updateMusiciansInEvent(Long musician, Long eventId);
 

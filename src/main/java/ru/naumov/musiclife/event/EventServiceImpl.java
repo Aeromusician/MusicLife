@@ -2,7 +2,8 @@ package ru.naumov.musiclife.event;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import ru.naumov.musiclife.auth.User;
@@ -77,13 +78,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDTO> getAllEvents(Sort sort) { //todo:Добавить фильтрацию
-        List<EventEntity> event = repository.findAll(sort);
-        List<EventDTO> dto = new ArrayList<>();
-        event.forEach(e -> {
-            dto.add(toDto(e));
-        });
-        return dto;
+    public Page<EventDTO> getAllEvents(Pageable pageable) { //todo:Добавить фильтрацию
+        return repository.findAll(pageable).map(this::toDto);
     }
 
     @Override
