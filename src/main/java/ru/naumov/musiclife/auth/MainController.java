@@ -65,8 +65,7 @@ public class MainController {
     }
 
     @GetMapping("/{id}")
-    public Response<UserProfileDTO> getMyProfile(@PathVariable Long id) {
-        userProfileService.getMyProfile(id);
+    public Response<UserProfileDTO> getMyProfile(@PathVariable Long id) {;
         return Response.data(userProfileService.getMyProfile(id));
     }
 
